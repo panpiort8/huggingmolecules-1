@@ -1,0 +1,23 @@
+include 'experiments/configs/setup.gin'
+
+# ==============================================================================
+neptune.project_name = 'sandbox'
+pretrain.root_path = './experiments_results'
+name.prefix = 'Train'
+
+# ==============================================================================
+data.split_method = 'random'
+data.split_frac = [0.8, 0.1, 0.1]
+
+# ==============================================================================
+pretrain.resume = False
+
+# ==============================================================================
+pretrain.num_epochs = 2
+pretrain.batch_size = 4
+pretrain.dataset_path = 'data/pretraining.csv'
+
+task.name = "classification"
+loss_fn.name = 'CrossEntropyLoss'
+model.generator_d_outputs = 3
+model.generator_aggregation = "contextual"

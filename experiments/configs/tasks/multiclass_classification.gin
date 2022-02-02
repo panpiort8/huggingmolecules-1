@@ -1,0 +1,5 @@
+# ==============================================================================
+task.name = "multiclass_classification"
+loss_fn.name = 'CrossEntropyLoss'
+metric.name = 'Accuracy'
+metric.direction = 'maximize'

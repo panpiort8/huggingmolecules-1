@@ -3,6 +3,7 @@ from typing import *
 
 import numpy as np
 import torch
+from rdkit import Chem
 from sklearn.metrics import pairwise_distances
 
 from .featurization_api import PretrainedFeaturizerMixin, RecursiveToDeviceMixin
@@ -16,6 +17,7 @@ from ..configuration import RMatConfig
 
 @dataclass
 class RMatMoleculeEncoding:
+    mol: Chem.Mol
     node_features: np.ndarray
     bond_features: np.ndarray
     distance_matrix: np.ndarray
@@ -26,6 +28,7 @@ class RMatMoleculeEncoding:
 
 @dataclass
 class RMatBatchEncoding(RecursiveToDeviceMixin):
+    batch_mask: torch.BoolTensor
     node_features: torch.FloatTensor
     bond_features: torch.FloatTensor
     relative_matrix: torch.FloatTensor
@@ -60,7 +63,8 @@ class RMatFeaturizer(PretrainedFeaturizerMixin[RMatMoleculeEncoding, RMatBatchEn
         relative_matrix = build_relative_matrix(adj_matrix)
         bond_features, node_features = add_mask_feature(bond_features, node_features)
 
-        return RMatMoleculeEncoding(node_features=node_features,
+        return RMatMoleculeEncoding(mol=mol,
+                                    node_features=node_features,
                                     bond_features=bond_features,
                                     distance_matrix=dist_matrix,
                                     relative_matrix=relative_matrix,
@@ -72,11 +76,12 @@ class RMatFeaturizer(PretrainedFeaturizerMixin[RMatMoleculeEncoding, RMatBatchEn
         dist_matrix = pad_sequence([torch.tensor(e.distance_matrix).float() for e in encodings])
         bond_features = pad_sequence([torch.tensor(e.bond_features).float() for e in encodings])
         relative_matrix = pad_sequence([torch.tensor(e.relative_matrix).float() for e in encodings])
-
+        batch_mask = torch.sum(torch.abs(node_features), dim=-1) != 0
         return RMatBatchEncoding(node_features=node_features,
                                  bond_features=bond_features,
                                  relative_matrix=relative_matrix,
                                  distance_matrix=dist_matrix,
                                  generated_features=stack_generated_features(encodings),
                                  y=stack_y(encodings),
-                                 batch_size=len(encodings))
+                                 batch_size=len(encodings),
+                                 batch_mask=batch_mask)

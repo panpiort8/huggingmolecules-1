@@ -19,7 +19,9 @@ ADDITIONAL_BINDINGS_ARGS = {
     'name.prefix': {'type': str},
     'model.pretrained_name': {'type': eval_or_str},
     'train.gpus': {'type': eval},
-    'train.num_epochs': {'type': int}
+    'train.num_epochs': {'type': int},
+    'pretrain.gpus': {'type': eval},
+    'pretrain.num_epochs': {'type': int}
 }
 
 

@@ -1,0 +1,4 @@
+include 'experiments/configs/tasks/multiclass_classification.gin'
+
+data.task_name = "contextual_pretraining"
+data.dataset_name = "test"

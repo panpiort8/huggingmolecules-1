@@ -77,12 +77,11 @@ class RMatModel(PretrainedModelBase[RMatBatchEncoding, RMatConfig]):
         self.init_weights(config.init_type)
 
     def forward(self, batch: RMatBatchEncoding):
-        batch_mask = torch.sum(torch.abs(batch.node_features), dim=-1) != 0
         embedded = self.src_embed(batch.node_features)
         distances_matrix = self.dist_rbf(batch.distance_matrix)
         edges_att = torch.cat((batch.bond_features, batch.relative_matrix, distances_matrix), dim=1)
-        encoded = self.encoder(embedded, batch_mask, edges_att=edges_att)
-        output = self.generator(encoded, batch_mask, batch.generated_features)
+        encoded = self.encoder(embedded, batch.batch_mask, edges_att=edges_att)
+        output = self.generator(encoded, batch.batch_mask, batch.generated_features)
         return output
 
 
