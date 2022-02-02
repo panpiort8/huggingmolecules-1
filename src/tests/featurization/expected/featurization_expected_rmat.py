@@ -1,9 +1,10 @@
-from huggingmolecules.featurization.featurization_matpp import MatppBatchEncoding, MatppMoleculeEncoding
 from numpy.ma import array
 from torch import FloatTensor
 
+from huggingmolecules.featurization.featurization_rmat import RMatBatchEncoding, RMatMoleculeEncoding
+
 expected_encoded_smiles = [
-    MatppMoleculeEncoding(
+    RMatMoleculeEncoding(
         node_features=array([[0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
                               0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                              [0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0.,
@@ -101,8 +102,9 @@ expected_encoded_smiles = [
                                 [1., 0., 0., 0., 0.],
                                 [1., 0., 0., 0., 0.],
                                 [1., 0., 0., 0., 0.]]]),
+        generated_features=None,
         y=None),
-    MatppMoleculeEncoding(
+    RMatMoleculeEncoding(
         node_features=array([[0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
                               0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                              [0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 1., 0., 0.,
@@ -165,9 +167,12 @@ expected_encoded_smiles = [
 
                                [[0., 1., 1.],
                                 [1., 0., 0.],
-                                [1., 0., 0.]]]), y=None)]
+                                [1., 0., 0.]]]),
+        generated_features=None,
+        y=None)
+]
 
-expected_batch = MatppBatchEncoding(
+expected_batch = RMatBatchEncoding(
     node_features=FloatTensor([[[0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
                                  0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                                 [0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0.,
@@ -366,4 +371,5 @@ expected_batch = MatppBatchEncoding(
                                   [1.0000e+06, 1.2195e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00],
                                   [0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00],
                                   [0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00]]]),
+    generated_features=None,
     y=None, batch_size=2)

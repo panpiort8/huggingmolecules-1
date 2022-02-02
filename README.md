@@ -68,6 +68,11 @@ conda activate huggingmolecules
 pip install -e ./src
 ```
 
+Huggingmolecules caches weights and configs of the models. To avoid issues with incompatibility of different package versions, it is recommended to clean up the cache directory after every package update:
+```
+python -m src.clean_cache --all
+```
+
 ## Project Structure
 
 The project consists of two main modules: `src/` and `experiments/` modules:
@@ -83,8 +88,8 @@ The project consists of two main modules: `src/` and `experiments/` modules:
 Huggingmolecules currently provides the following models architectures:
 
 * [MAT](https://github.com/ardigen/MAT)
-* MAT++ (preprint in preparation)
 * [GROVER](https://github.com/tencent-ailab/grover)
+* [R-MAT](https://arxiv.org/abs/2110.05841) (weights were obtained by joint efforts with Nvidia)
 
 For ease of benchmarking, we also include wrappers in the `experiments/` module for three other models architectures:
 
